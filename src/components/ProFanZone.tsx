@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, Heart, Send, User, Sparkles } from 'lucide-react';
+import { MessageSquare, Heart, Send, User, Sparkles, Mail } from 'lucide-react';
 import { KERALA_WISHES } from '../data/devnathData';
 
 export const ProFanZone: React.FC = () => {
@@ -13,21 +13,37 @@ export const ProFanZone: React.FC = () => {
     e.preventDefault();
     if (!name.trim() || !message.trim()) return;
 
+    const wishName = name.trim();
+    const wishLoc = location.trim() || 'Dubai / Kerala';
+    const wishMsg = message.trim();
+
     const newWish = {
       id: Date.now().toString(),
-      name: name.trim(),
-      location: location.trim() || 'Dubai / Kerala',
-      comment: message.trim(),
+      name: wishName,
+      location: wishLoc,
+      comment: wishMsg,
       time: 'Just now',
       likes: 1
     };
 
+    // Update local fan wall
     setWishes([newWish, ...wishes]);
+
+    // Send email to devnathmenon1@gmail.com via mailto trigger
+    const emailSubject = encodeURIComponent(`Fan Wish for Devnath Menon from ${wishName}`);
+    const emailBody = encodeURIComponent(
+      `Name: ${wishName}\nLocation: ${wishLoc}\n\nMessage:\n${wishMsg}\n\nSent via Devnath Menon Athlete Profile Fan Zone`
+    );
+    const mailtoUrl = `mailto:devnathmenon1@gmail.com?subject=${emailSubject}&body=${emailBody}`;
+
+    // Open email client
+    window.location.href = mailtoUrl;
+
     setName('');
     setLocation('');
     setMessage('');
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    setTimeout(() => setSubmitted(false), 5000);
   };
 
   const handleLike = (id: string) => {
@@ -42,9 +58,9 @@ export const ProFanZone: React.FC = () => {
         <div className="pro-section-title-bar">
           <div className="title-left">
             <MessageSquare size={20} className="title-icon-cyan" />
-            <h2>Supporter Fan Zone & Blessings</h2>
+            <h2>Supporter Fan Zone & Direct Email</h2>
           </div>
-          <span className="title-sub">Community Board</span>
+          <span className="title-sub">devnathmenon1@gmail.com</span>
         </div>
 
         <div className="pro-fanzone-grid">
@@ -53,12 +69,12 @@ export const ProFanZone: React.FC = () => {
           <div className="pro-wish-form-card">
             <h3>Send Wishes to Devnath Menon</h3>
             <p className="form-sub-text">
-              Leave your support and encouragement for Devnath as he pursues his dream of representing the UAE National Cricket Team.
+              Leave your encouragement for Devnath. Submitting this form will publish your wish to the fan wall and send a direct email to <strong>devnathmenon1@gmail.com</strong>.
             </p>
 
             {submitted && (
               <div className="wish-success-box animate-fade-in">
-                <Sparkles size={16} /> Your message has been published to the fan wall!
+                <Sparkles size={16} /> Wish published & email dispatched to devnathmenon1@gmail.com!
               </div>
             )}
 
@@ -88,16 +104,25 @@ export const ProFanZone: React.FC = () => {
                 <label>Message *</label>
                 <textarea
                   rows={4}
-                  placeholder="Write your wishes for Devnath..."
+                  placeholder="Write your message to Devnath..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
                 ></textarea>
               </div>
 
-              <button type="submit" className="btn-send-wish">
-                <Send size={15} /> Publish Message
-              </button>
+              <div className="form-button-group">
+                <button type="submit" className="btn-send-wish">
+                  <Send size={15} /> Publish & Email Wish
+                </button>
+
+                <a
+                  href="mailto:devnathmenon1@gmail.com?subject=Fan%20Inquiry%20for%20Devnath%20Menon"
+                  className="btn-direct-email"
+                >
+                  <Mail size={15} /> Direct Email
+                </a>
+              </div>
             </form>
           </div>
 
