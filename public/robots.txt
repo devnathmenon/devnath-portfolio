@@ -1,0 +1,6 @@
+# Robots.txt for Devnath Menon Athlete Profile Portfolio
+User-agent: *
+Allow: /
+
+# Sitemap URL
+Sitemap: https://devnathmenon.github.io/devnath-portfolio/sitemap.xml
